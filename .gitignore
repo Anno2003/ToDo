@@ -1,3 +1,4 @@
 *.exe
 example.txt
 todo.txt
+.vimspector.json

@@ -8,7 +8,7 @@ using std::endl;
 using std::string;
 using std::find;
 
-string getArg(char** begin,char** end,const string& opt){
+char* getArg(char** begin,char** end,const string& opt){
 	char** itr=find(begin,end,opt);
 	if(itr!=end && ++itr != end){return *itr;}
 	return 0;
@@ -30,8 +30,8 @@ int main(int argc,char** argv){
 			listing[idx][1]=line.substr(5,0);//priority
 			listing[idx][2]=line.substr(8,14);//due
 			listing[idx][3]=line.substr(22);//task
-			infile.close();
 		}
+		infile.close();
 		
 		if (argExists(argv,argv+2,"list")){//list argument
 			cout<<"listing"<<std::endl;
@@ -52,14 +52,19 @@ int main(int argc,char** argv){
 		
 		if (argExists(argv,argv+2,"add")){//add argument
 			int taskID=listing.size()+1;
-			string task = getArg(argv,argv+argc,"add");
-			outfile<<taskID<<"[.](_) due:========== "<<task<<"\n";
-			outfile.close();
-			cout<<"Created task: \n"<<task<<endl;
+			char* task = getArg(argv,argv+argc,"add");
+			if(!task){//make sure task is specified
+				cout<<"no task added\n";
+				return 0;
+			}else{
+				outfile<<taskID<<"[.](_) due:========== "<<task<<"\n";
+				outfile.close();
+				cout<<"Created task: \n|"<<taskID<<"|"<<task<<endl;
+			}
 		}
 	}
 	else{
-		cout<<"Invalid argument(s)!"<<std::endl;
+		cout<<"Invalid argument!"<<std::endl;
 	}
 	
 	return 0;
