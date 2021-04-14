@@ -76,12 +76,30 @@ int main(int argc,char** argv){
 				outfile<<key.first<<"["<<completion<<"]"<<"("<<priority<<") "<<due<<" "<<task<<endl;
 			}
 			outfile.close();
+			cout<<"Marked task "<<taskID<<" as done\n";
 		}
 
-		else if(argExists(argv,argv+1,"prune")){//prune argument
-			//TODO:create prune to remove tasks that are done from text file
+		else if(argExists(argv,argv+2,"prune")){//prune argument
+			int ctr=1;
+			outfile.open("todo.txt",std::ofstream::trunc);
+			for(auto key:listing){
+				if (key.second[0]=="x"){
+					listing.erase(key.first);
+				}
+			}
+			for(auto key:listing){
+				string completion=listing[key.first][0];
+				string priority=listing[key.first][1];
+				string due=listing[key.first][2];
+				string task=listing[key.first][3];
+				outfile<<ctr<<"["<<completion<<"]"<<"("<<priority<<") "<<due<<" "<<task<<endl;
+				ctr++;
+			}
+			outfile.close();
+			cout<<"Done cleaning!\n";
 		}
 		
+		//TODO:add help 
 		else{
 			cout<<"Invalid argument(s)!\n";
 		}
